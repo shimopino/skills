@@ -1,16 +1,14 @@
 ---
 name: grilling
-description: Grill the user relentlessly about a plan or design. Use when the user wants to stress-test a plan before building, or uses any 'grill' trigger phrases.
+description: 計画や設計についてユーザーを容赦なくグリルする。計画を design tree として捉え、前提が確定した質問（frontier）をラウンド単位で番号付き一括質問する。「grill」「grilling」「グリルして」などのフレーズが使われたとき、または実装前に計画をストレステストしたいときに必ず使用すること。
 ---
 
-Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one, starting with the decisions that would be most expensive to reverse. For each question, provide your recommended answer and the reason; if you have no real basis to recommend, say so instead of inventing one.
+ユーザーと共通理解に達するまで、容赦なくインタビューせよ。対象を **design tree** としてマップする。すべての決定は、そこにぶら下がる決定へと枝分かれする。
 
-Ask the questions one at a time, waiting for feedback on each question before continuing. Asking multiple questions at once is bewildering.
+木を**ラウンド**単位で進める。**frontier** とは、前提がすでに確定している決定すべて、つまりまだ聞いていない答えを推測せずに*いま*聞ける質問である。frontier 全体を1ラウンドで聞く。各質問に番号を振り、推奨する答えを添える。そして次のラウンドの前にユーザーの回答を待つ。
 
-If a fact can be found by exploring the codebase, look it up rather than asking me. The decisions, though, are mine — put each one to me and wait for my answer.
+ユーザーが回答するたびに木は形を変える。確定した決定が frontier を外側へ押し広げ、それに依存していた質問を解放する。frontier を再計算し、次のラウンドを聞く。同じラウンド内でまだ開いている質問に答えが依存する質問は、このラウンドではなく*後の*ラウンドに属する。
 
-Don't just record my answers — grill them. If an answer contradicts an earlier decision, the codebase, or breaks under a plausible failure case, push back and say why.
+*事実*を見つけるのはあなたの仕事であり、ユーザーの仕事ではない。frontier の質問が環境（ファイルシステム、ツール等）の事実を必要とするとき、サブエージェントを併走できる環境では、調査をバックグラウンドに dispatch してラウンドをブロックさせない。併走できない環境では、調査未完了の事実を未確定の前提として扱い、その下流の質問だけを後のラウンドに回し、残りの frontier を先に聞く。自分で調べられることをユーザーに聞いてはならない。*決定*はユーザーのものである。ひとつずつ提示し、回答を待て。
 
-Every few decisions, briefly restate what we have settled and which branches remain open.
-
-When we're done, write each decision and its reason into the plan file. Do not enact the plan until I confirm we have reached a shared understanding.
+セッションの終わりは frontier が空になったときである。design tree のすべての枝を訪れ、暗黙の仮定が何も残っていない状態を指す。ユーザーが共通理解に達したと確認するまで、行動に移してはならない。
