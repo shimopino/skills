@@ -1,65 +1,56 @@
 ---
 name: examples
-description: 確定した業務ルールに対して、BDD の実例マッピング（ルール・実例・疑問）を行い、ソフトウェアテスト技法（同値分割・境界値、デシジョンテーブル、状態遷移、直交表）を選んで適用し、docs/groundwork/features/<機能名>/spec.md にテストケースの材料を書く。ユーザーが「テストケースを考えたい」「仕様を実例で確認したい」「境界値」「デシジョンテーブル」「状態遷移」と言ったとき、または実装前に業務ルールの網羅性を確認したいときに必ず使う。
+description: Map business rules to concrete examples, open questions, and test cases using appropriate test design techniques. Use to check specifications, explore boundaries, or prepare test cases.
 ---
 
-# examples
+# Examples
 
-ルールを実例で検証し、技法で網羅する。実装前に仕様の穴を見つけるのが目的。
+Find gaps in business rules through concrete examples and systematic test design.
 
-## 入力
+## Input
 
-- 直前の会話（グリルで確定したルール、口頭で出た実例）
-- `docs/groundwork/glossary.md`（用語はここに合わせる。未定義の用語が出たら `glossary` を呼ぶ）
-- 既存の `docs/groundwork/features/<機能名>/spec.md`（あれば更新）
+- Business rules from a conversation, specification, or other supplied material.
+- Existing terminology and examples, when available; no particular source or document format is required.
+- An optional output destination or existing document to update. Follow the requested destination or project convention; otherwise return the result in the conversation.
 
-## 手順
+## Judgment
 
-1. **ルールを列挙する**: 会話から業務ルールを R1, R2, … として 1 文ずつ抜き出す。一覧をユーザーに見せて確認する。
-2. **実例マッピング**: 各ルールに最低 1 つ、境界がある場合は両側の実例を付ける。「前提 / 操作 / 期待結果」で書く。実例が作れないルールは曖昧な証拠。疑問として記録する。
-3. **疑問を分離する**: 決まらなかったことは Q として書き、担当者と期限を聞く。勝手に埋めない。
-4. **技法を選ぶ**: `references/techniques.md` を読み、ルールの形から技法を選ぶ。該当するものだけ適用し、表にする。
-5. **テストケース一覧を作る**: 実例と表の行から TC を起こし、由来と種別（単体 / 統合）を付ける。層への割り当ては `stacked-prs` が行うので空欄でよい。
-6. **好みの適用**: `preferences` を読む。principle-examples-before-code と principle-illegal-states-unrepresentable が主に効く。状態遷移表がある概念は、型設計への示唆として spec に 1 行メモする。
+1. Extract rules as R1, R2, and so on, using one sentence each. Surface ambiguous interpretations for confirmation.
+2. Attach at least one concrete example to each rule, covering both sides of any boundary. Use precondition / action / expected result. If an example cannot be constructed, record the ambiguity as a question.
+3. Keep unresolved questions separate. Do not invent answers; record owners and deadlines only when supplied or needed for the user's workflow.
+4. Read `references/techniques.md` and apply only techniques relevant to the shape of the rules.
+5. Derive test cases from examples and technique tables. Preserve their origins; assign test levels only when the available context supports them.
 
-## spec.md の書式
+If no rule is sufficiently clear, ask for the missing behavior or a concrete example and report what remains unresolved. Clarify undefined terms directly, using existing definitions when available.
+
+## Output
+
+Return rules, examples, unresolved questions, applicable technique tables, and traceable test cases. Adapt the format to an existing document when one is supplied. Otherwise use:
 
 ```markdown
-# <機能名> 仕様（groundwork/examples）
+# <Feature> specification
 
-## 参照する用語
-- <用語> → docs/groundwork/glossary.md#<用語>
+## Terms
+<Definitions or links, when relevant.>
 
-## ルール
-- R1: <1 文の業務ルール>
+## Rules
+- R1: <business rule>
 
-## 実例（ルールごとに最低 1 つ、境界の両側を含む）
-| ID | ルール | 前提 | 操作 | 期待結果 |
-|----|--------|------|------|----------|
+## Examples
+| ID | Rule | Precondition | Action | Expected result |
+|----|------|--------------|--------|-----------------|
 | E1 | R1 | | | |
 
-## 未解決の疑問
-- Q1: <内容>（担当: / 期限: ）
+## Open questions
+- Q1: <unresolved question>
 
-## 技法の適用（該当するものだけ残す）
-### 同値分割・境界値
-| 入力 | 同値クラス | 境界値 | 期待 |
+## Applied techniques
+<Only the relevant tables.>
 
-### デシジョンテーブル
-| 条件1 | 条件2 | … | 動作 |
-
-### 状態遷移
-| 現状態 | イベント | 次状態 | 不正遷移の扱い |
-
-### 直交表
-| # | P1 | P2 | P3 | 期待 |
-
-## テストケース一覧
-| TC | 由来（E / 表の行） | 種別（単体 / 統合） | 層（plan.md） |
+## Test cases
+| ID | Origin (example or table row) | Expected behavior | Test level, if known |
+|----|-------------------------------|-------------------|----------------------|
+| TC1 | E1 | | |
 ```
 
-## 規律
-
-- 「該当するものだけ残す」を厳守。使わなかった技法の見出しは削除する。
-- 実例はユーザーの業務の言葉で書く。技術用語（DB、API）は前提欄に閉じ込める。
-- ルールが 1 つも確定していないなら、この skill を使わず `grill-with-docs` に戻す。
+Write examples in the user's business language. Keep technical setup details in preconditions. Omit unused technique headings.

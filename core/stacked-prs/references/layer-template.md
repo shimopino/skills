@@ -1,37 +1,36 @@
-# plan.md テンプレート
+# Implementation plan template
 
 ```markdown
-# <機能名> 実装計画（groundwork/stacked-prs）
+# <Feature> implementation plan
 
-各層は単独で main にマージ可能（ビルド・テスト・リント通過、見える変化は層内で完結）。
+Each merge point leaves the target branch healthy after declared predecessors have merged.
 
-## 層 1: <役割を表す題名>
-- 変更範囲: <モジュール／パッケージ／ファイル群>
-- 依存する層: なし
-- 見える変化: なし / あり（完結の根拠: …）
-- ルール / テスト: R1, R2 / TC1, TC3
-- 検証: <コマンド or 手順>
+## Step 1: <responsibility>
+- Scope: <modules / packages / files>
+- Depends on: none
+- Visible change: none / <behavior and why it is complete>
+- Requirements / tests: <source identifiers or descriptive references>
+- Verification: <executable commands or concrete steps>
 
-## 層 2: <役割>
-- 変更範囲:
-- 依存する層: 1
-- 見える変化:
-- ルール / テスト:
-- 検証:
+## Step 2: <responsibility>
+- Scope:
+- Depends on: Step 1
+- Visible change:
+- Requirements / tests:
+- Verification:
 ```
 
-## 記入の指針
+## Guidance
 
-- 題名は役割で書く。「型追加」ではなく「注文状態のドメインモデル」。
-- 「見える変化: あり」なら、完結の根拠（フラグの裏、既存経路は無変更、など）を必ず書く。書けない層は切り直す。
-- 検証は実行可能な形で。「テストが通る」ではなく `./gradlew :order:test` のように。
-- ロールバック欄は不要。層が独立なら「その PR を revert」で常に済む。
+- Name each step by responsibility, such as "Order state model", rather than "Add types".
+- Explain why visible changes are complete at each merge point. Rework the split if this cannot be justified.
+- Give executable verification, such as `./gradlew :order:test`, rather than "tests pass".
 
-## 切り直しの典型
+## Splits to reconsider
 
-| 悪い切り方 | 何が起きるか | 直し方 |
-|---|---|---|
-| API の半分／残り半分 | 前半マージでエンドポイントが壊れる | エンドポイント全体を 1 層に。型と業務ルールを先に別層へ |
-| 移行スクリプトを先頭に | データ前提のコードがまだない | データを読むコードと同じ層か、その直後の層に |
-| 「テストは最後にまとめて」 | 各層が健全か判定できない | テストは対象コードと同じ層に |
-| コード量で 300 行ずつ | 役割が途中で切れる | 役割で切り直す。大きい層はレビュアーが 15 分で読めるかで再分割を検討 |
+| Split | Problem | Revision |
+|-------|---------|----------|
+| Half an API, then the rest | The first merge breaks an endpoint | Keep the endpoint complete; extract types and business rules first if useful |
+| Migration before compatible code | The code does not support the data assumptions | Order compatible code and migration so every intermediate state works |
+| All tests in the final step | Earlier merge points cannot be verified | Include tests with their target code |
+| Fixed line-count chunks | Responsibilities are cut in half | Split by responsibility and reviewability |

@@ -1,55 +1,54 @@
 ---
 name: adr
-description: 設計の会話で下された決定のうち、元に戻しにくく・文脈なしでは驚かれ・本当のトレードオフの結果であるものだけを Architecture Decision Record として docs/groundwork/adr/NNNN-題名.md に記録する。設計判断、技術選定、方針の決定が会話に出たら必ず 3 条件を評価する。ユーザーが「ADR」「決定を記録」「なぜこうしたか残したい」と言ったときも使う。
+description: Record consequential decisions as Architecture Decision Records. Use when a design or policy decision is made, or when the user asks to preserve a decision and its rationale.
 ---
 
-# adr
+# ADR
 
-決定は少なく、正確に記録する。ほとんどの決定は ADR にならない。それは正常。
+Record few decisions, accurately. Most decisions do not need an ADR.
 
-## 3 条件ゲート
+## Input
 
-決定が出たら次を評価し、**3 つ全部**を満たすときだけ ADR を提案する。
+- A decision, its context, realistic alternatives, and reasons supplied by the user or project materials.
+- Existing decision records and project conventions, when available.
+- An optional output location. Follow the user's location or existing project convention; otherwise use `docs/adr/`.
 
-1. **元に戻しにくい**: 後で考えを変えるコストが有意にある
-2. **文脈なしでは驚く**: 将来の読者が「なぜこうした？」と疑問に思う
-3. **本当のトレードオフの結果**: 現実的な代替案があり、特定の理由でこれを選んだ
+## Judgment
 
-1 つでも欠けたら ADR にしない。会話で「これは ADR にしません（理由: 可逆だから）」と一言添えてよい。
+Propose an ADR only when all three conditions hold:
 
-## 振る舞い
+1. **Costly to reverse:** changing course later has a meaningful cost.
+2. **Surprising without context:** a future reader would ask why this choice was made.
+3. **A real tradeoff:** realistic alternatives existed and were rejected for specific reasons.
 
-1. `docs/groundwork/adr/` を読み、既存 ADR と番号を把握する。プロジェクトに別の ADR ディレクトリ（`doc/architecture/decisions/` など）があるならそちらに従う。
-2. 3 条件を満たしたら「ADR-NNNN: <題名> を書きます」と提案し、書く。内容はユーザーの言葉に基づき、推測で埋めない。
-3. 既存 ADR と矛盾する決定が出たら、上書きせず新しい ADR を作り、古いものの Status を `Superseded by NNNN` にする。
-4. `preferences` の原則から逸脱する決定は、それ自体が 3 条件を満たすことが多い。満たすなら「原則 X からの逸脱」を Context に明記する。
+If a condition is missing, explain briefly when useful. Do not invent missing rationale or record an unsettled proposal as accepted.
 
-## 書式（Nygard 最小形 + 代替案）
+## Output
 
-ファイル名: `NNNN-kebab-case-title.md`（4 桁ゼロ埋め）
+1. Read existing records to determine numbering and relevant decisions.
+2. For a qualifying decision, announce the proposed record and write it using the user's stated facts.
+3. When a decision replaces an existing one, create a new record and mark the old record `Superseded by NNNN`; do not overwrite its rationale.
+4. If the decision departs from an established policy or constraint, explain the departure in Context.
+
+Use `NNNN-kebab-case-title.md` with four-digit numbering, unless the project has another convention.
 
 ```markdown
-# ADR-NNNN: <決定を名詞句で>
+# ADR-NNNN: <decision>
 
 Status: Accepted | Superseded by NNNN
 Date: YYYY-MM-DD
 
 ## Context
-<制約、現状、なぜ今この決定が必要か。会話で出た事実のみ。>
+<Constraints, current situation, and why the decision is needed.>
 
 ## Decision
-<何を決めたか。現在形で。>
+<What was decided, in the present tense.>
 
 ## Alternatives considered
-- <代替案 A>: <なぜ選ばなかったか>
-- <代替案 B>: <なぜ選ばなかったか>
+- <Alternative>: <reason it was rejected>
 
 ## Consequences
-<良いこと、悪いこと、新たに生じる制約。正直に。>
+<Benefits, drawbacks, and new constraints.>
 ```
 
-## 書かないもの
-
-- 実装手順、設定値、コードの断片
-- まだ議論中の案
-- 翌週変えられる選択（ライブラリのバージョンなど）
+Exclude implementation procedures, configuration values, code fragments, and easily reversible choices.
