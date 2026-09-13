@@ -1,0 +1,29 @@
+name: shimopino
+version: 1.0.0
+description: Globally managed agent skills (deployed via `apm install -g`)
+author: shimopino
+# claude / codex / opencode はネイティブターゲット。
+# pi は APM のターゲットに存在しないが、agent-skills が展開する
+# ~/.agents/skills/ を pi がグローバルスキルとして読み込む。
+targets:
+  - claude
+  - codex
+  - opencode
+  - agent-skills
+dependencies:
+  apm:
+    # - ~/.config/skills/
+
+    # サードパーティは必要最小限のものだけ読み出す
+    - mattpocock/skills/skills/productivity/grilling#v1.2.3
+
+    # 日本語文章
+    - coji/natural-japanese#v1.5.0
+    - git: https://gist.github.com/k16shikano/eb2929f13ed19c97188393d297be8432.git
+      alias: cognitive-rhythm-writing
+    - git: https://gist.github.com/k16shikano/fd287c3133457c4fd8f5601d34aa817d.git
+      alias: japanese-tech-writing
+
+  mcp: []
+includes: auto
+scripts: {}
