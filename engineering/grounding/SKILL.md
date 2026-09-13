@@ -1,5 +1,5 @@
 ---
-name: grill-with-docs
+name: grounding
 description: 計画・設計・アイデアを執拗にインタビューして磨きつつ、確定した用語を docs/groundwork/glossary.md に、元に戻しにくい決定を docs/groundwork/adr/ に記録する。ユーザーが "grill me", "設計をグリルして", "この計画を詰めたい" と言ったときに使う。
 disable-model-invocation: true
 ---
