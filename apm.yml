@@ -12,14 +12,14 @@ targets:
   - agent-skills
 dependencies:
   apm:
-    # 自作スキルへの参照を設定
-    - shimopino/core/adr
-    - shimopino/core/examples
-    - shimopino/core/glossary
-    - shimopino/core/stacked-prs
-    - shimopino/engineering/design-to-plan
-    - shimopino/engineering/grounding
-    - shimopino/preferences
+    # 自作スキルへの参照を設定（リポジトリ名 shimopino/skills を明示）
+    - shimopino/skills/core/adr
+    - shimopino/skills/core/examples
+    - shimopino/skills/core/glossary
+    - shimopino/skills/core/stacked-prs
+    - shimopino/skills/engineering/design-to-plan
+    - shimopino/skills/engineering/grounding
+    - shimopino/skills/preferences
 
     # サードパーティは必要最小限のものだけ読み出す
     - mattpocock/skills/skills/productivity/grilling#v1.2.3
